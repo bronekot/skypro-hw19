@@ -12,12 +12,19 @@ class MyServer(BaseHTTPRequestHandler):
     обработку входящих запросов от клиентов
     """
 
+    filename = "index.html"
+
+    def get_context_data(self):
+        with open(self.filename, "r", encoding="utf-8") as f:
+            context = f.read()
+        return context
+
     def do_GET(self):
         """Метод для обработки входящих GET-запросов"""
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(bytes("{'message': 'OK'}", "utf-8"))  # Тело ответа
+        self.wfile.write(bytes(self.get_context_data(), "utf-8"))  # Тело ответа
 
 
 if __name__ == "__main__":
